@@ -1,11 +1,11 @@
 import React from "react";
 import {
-  Icon,
   Calendar,
   ChartBar,
   Flag,
   Inbox,
   LayoutGrid,
+  Clock,
 } from "tabler-icons-react";
 import {
   Box,
@@ -17,14 +17,15 @@ import {
   ThemeIcon,
   UnstyledButton,
 } from "@mantine/core";
-import { LinksGroup } from "./NavbarLinksGroup/NavbarLinksGroup";
 import { Link } from "react-router-dom";
+import DarkModeToggle from "./DarkModeToggle";
 
 const data = [
   { label: "Inbox", icon: Inbox, link: "/inbox" },
   { label: "Overview", icon: ChartBar, link: "/overview" },
   { label: "Today", icon: Calendar, link: "/today" },
   { label: "Projects", icon: LayoutGrid, link: "/projects" },
+  { label: "Undated", icon: Clock, link: "/undated" },
   { label: "Flagged", icon: Flag, link: "/flagged" },
 ];
 
@@ -106,7 +107,7 @@ const useStyles = createStyles((theme) => ({
 
 const Sidebar = () => {
   const { classes } = useStyles();
-  const links = data.map((item) => <LinksGroup {...item} key={item.label} />);
+  //const links = data.map((item) => <LinksGroup {...item} key={item.label} />);
 
   return (
     <Navbar height={800} width={{ sm: 300 }} p="md" className={classes.navbar}>
@@ -135,13 +136,9 @@ const Sidebar = () => {
         </div>
       </Navbar.Section>
 
-      {/*<Navbar.Section className={classes.footer}>
-        <UserButton
-          image="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-          name="Ann Nullpointer"
-          email="anullpointer@yahoo.com"
-        />
-      </Navbar.Section>*/}
+      <Navbar.Section className={classes.footer}>
+        <DarkModeToggle />
+      </Navbar.Section>
     </Navbar>
   );
 };
