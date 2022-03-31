@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Group } from "@mantine/core";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Inbox from "./components/Inbox/Inbox";
+import Sidebar from "./components/Navbar";
+import Today from "./components/Today/Today";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Group align="start">
+        <Sidebar />
+        <Routes>
+          <Route path="/inbox" element={<Inbox />} />
+          <Route path="/today" element={<Today />} />
+        </Routes>
+      </Group>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
