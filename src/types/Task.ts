@@ -1,6 +1,7 @@
-export type Task = {
+export type TaskType = {
+  id: string;
   name: string;
-  date: Date;
+  date?: Date;
   completed: boolean;
   subtasks?: Subtask[];
 };

@@ -21,8 +21,8 @@ import { Link } from "react-router-dom";
 import DarkModeToggle from "./DarkModeToggle";
 
 const data = [
-  { label: "Inbox", icon: Inbox, link: "/inbox" },
   { label: "Overview", icon: ChartBar, link: "/overview" },
+  { label: "Inbox", icon: Inbox, link: "/inbox" },
   { label: "Today", icon: Calendar, link: "/today" },
   { label: "Projects", icon: LayoutGrid, link: "/projects" },
   { label: "Undated", icon: Clock, link: "/undated" },
@@ -112,7 +112,7 @@ const Sidebar = () => {
   return (
     <Navbar height={800} width={{ sm: 300 }} p="md" className={classes.navbar}>
       <Navbar.Section className={classes.header}>
-        <Title>Check</Title>
+        <Title>todo.</Title>
       </Navbar.Section>
 
       <Navbar.Section grow className={classes.links} component={ScrollArea}>

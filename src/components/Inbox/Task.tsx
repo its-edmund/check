@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import { Check } from "tabler-icons-react";
 
 type TaskProps = {
-  text?: string;
+  name?: string;
+  id: string;
+  completed: boolean;
+  toggleComplete: (id: string) => void;
 };
 
 const useStyles = createStyles((theme) => ({
@@ -34,9 +37,9 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Task = ({ text = "" }: TaskProps) => {
+const Task = ({ name = "", id, completed, toggleComplete }: TaskProps) => {
   const { classes } = useStyles();
-  const [completed, setCompleted] = useState(false);
+  const [completedState, setCompletedState] = useState(false);
 
   return (
     <>
@@ -46,18 +49,18 @@ const Task = ({ text = "" }: TaskProps) => {
             variant="light"
             size={30}
             className={classes.completedIcon}
-            onClick={() => setCompleted(false)}
+            onClick={() => toggleComplete(id)}
           >
             <Check />
           </ThemeIcon>
         ) : (
           <div
             className={classes.uncompletedIcon}
-            onClick={() => setCompleted(true)}
+            onClick={() => toggleComplete(id)}
           ></div>
         )}
         <Text sx={{ textDecoration: completed ? "line-through" : "none" }}>
-          {text}
+          {name}
         </Text>
       </Paper>
     </>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import {
   Box,
+  Button,
+  Collapse,
   createStyles,
   Paper,
   Text,
@@ -8,7 +10,11 @@ import {
   ThemeIcon,
   Title,
 } from "@mantine/core";
-import { Plus } from "tabler-icons-react";
+import { ArrowNarrowRight, Plus } from "tabler-icons-react";
+import { DatePicker } from "@mantine/dates";
+import { useForm } from "@mantine/hooks";
+
+const tags = [];
 
 const useStyles = createStyles((theme) => ({
   addItem: {
@@ -32,64 +38,116 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const AddItem = () => {
+type AddItemProps = {
+  addTask: (name: string) => void;
+};
+
+const AddItem = ({ addTask }: AddItemProps) => {
   const [editing, setEditing] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const { classes } = useStyles();
 
+  const form = useForm({
+    initialValues: {
+      name: "",
+    },
+  });
+
   return (
     <>
       <Paper shadow="md" radius="lg" className={classes.addItem}>
-        <Paper
-          radius="lg"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            width: "100%",
-            padding: "15px 30px",
-          }}
+        <form
+          onSubmit={form.onSubmit((values) => {
+            addTask(values.name);
+            setEditing(false);
+            form.reset();
+          })}
+          style={{ width: "100%" }}
         >
-          <ThemeIcon
-            variant="light"
-            size={30}
-            className={classes.addIcon}
-            onClick={() => {
-              setExpanded(!expanded);
-            }}
-          >
-            <Plus />
-          </ThemeIcon>
-          {editing ? (
-            <TextInput
-              variant="unstyled"
-              style={{
-                height: "25px",
-                fontSize: "16px",
-                width: "100%",
-              }}
-              onBlur={() => setEditing(false)}
-            />
-          ) : (
-            <Text onClick={() => setEditing(true)}>Add an item</Text>
-          )}
-        </Paper>
-        {expanded && (
-          <Box
+          <Paper
+            radius="lg"
             style={{
-              padding: "15px 30px",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
+              width: "100%",
+              padding: "15px 30px",
             }}
           >
-            <Title order={5}>Title:</Title>
-            <TextInput
-              variant="default"
-              style={{ marginLeft: "10px", width: "100%", border: "none" }}
-            />
-          </Box>
-        )}
+            <ThemeIcon
+              variant="light"
+              size={30}
+              className={classes.addIcon}
+              onClick={() => {
+                setExpanded(!expanded);
+              }}
+            >
+              <Plus />
+            </ThemeIcon>
+            {editing ? (
+              <TextInput
+                variant="unstyled"
+                styles={{
+                  input: {
+                    position: "relative",
+                    height: "25px",
+                    fontSize: "16px",
+                    width: "100%",
+                  },
+                  root: {
+                    width: "100%",
+                  },
+                }}
+                {...form.getInputProps("name")}
+                rightSection={
+                  <Button
+                    variant="subtle"
+                    radius="md"
+                    sx={(theme) => ({
+                      padding: "5px",
+                    })}
+                    type="submit"
+                  >
+                    <ArrowNarrowRight />
+                  </Button>
+                }
+              />
+            ) : (
+              <Text
+                onClick={() => setEditing(true)}
+                sx={(theme) => ({
+                  color:
+                    theme.colorScheme === "dark"
+                      ? theme.colors.dark[3]
+                      : theme.colors.gray[5],
+                })}
+              >
+                Add an item
+              </Text>
+            )}
+          </Paper>
+          <Collapse
+            in={expanded}
+            style={{
+              width: "100%",
+              padding: "15px 30px",
+            }}
+          >
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <Title order={5} style={{ paddingRight: "20px" }}>
+                Date:
+              </Title>
+              <DatePicker placeholder="Pick date" variant="unstyled" />
+            </Box>
+          </Collapse>
+        </form>
       </Paper>
     </>
   );

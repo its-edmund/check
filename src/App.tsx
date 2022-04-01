@@ -9,6 +9,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Inbox from "./components/Inbox/Inbox";
 import Sidebar from "./components/Navbar";
 import Today from "./components/Today/Today";
+import Overview from "./components/Overview/Overview";
 
 const App = () => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
@@ -34,6 +35,7 @@ const App = () => {
           >
             <Routes>
               <Route path="/inbox" element={<Inbox />} />
+              <Route path="/overview" element={<Overview />} />
               <Route path="/today" element={<Today />} />
             </Routes>
           </AppShell>
