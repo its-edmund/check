@@ -1,4 +1,4 @@
-import { Container, Tabs, Text, Title } from "@mantine/core";
+import { Container, Tabs, Title } from "@mantine/core";
 import React from "react";
 
 const Overview = () => {

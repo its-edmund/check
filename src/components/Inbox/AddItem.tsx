@@ -14,8 +14,6 @@ import { ArrowNarrowRight, Plus } from "tabler-icons-react";
 import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/hooks";
 
-const tags = [];
-
 const useStyles = createStyles((theme) => ({
   addItem: {
     display: "flex",
@@ -39,17 +37,22 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type AddItemProps = {
-  addTask: (name: string) => void;
+  addTask: (name: string, date: Date | undefined) => void;
 };
 
 const AddItem = ({ addTask }: AddItemProps) => {
   const [editing, setEditing] = useState(false);
   const [expanded, setExpanded] = useState(false);
+
   const { classes } = useStyles();
 
   const form = useForm({
     initialValues: {
       name: "",
+      date: undefined,
+    },
+    validationRules: {
+      name: (value) => value.length > 0,
     },
   });
 
@@ -58,7 +61,8 @@ const AddItem = ({ addTask }: AddItemProps) => {
       <Paper shadow="md" radius="lg" className={classes.addItem}>
         <form
           onSubmit={form.onSubmit((values) => {
-            addTask(values.name);
+            console.log(values);
+            addTask(values.name, values.date);
             setEditing(false);
             form.reset();
           })}
@@ -86,6 +90,7 @@ const AddItem = ({ addTask }: AddItemProps) => {
             </ThemeIcon>
             {editing ? (
               <TextInput
+                autoFocus
                 variant="unstyled"
                 styles={{
                   input: {
@@ -99,6 +104,11 @@ const AddItem = ({ addTask }: AddItemProps) => {
                   },
                 }}
                 {...form.getInputProps("name")}
+                onBlur={() => {
+                  if (form.values.name.length === 0) {
+                    setEditing(false);
+                  }
+                }}
                 rightSection={
                   <Button
                     variant="subtle"
@@ -144,7 +154,11 @@ const AddItem = ({ addTask }: AddItemProps) => {
               <Title order={5} style={{ paddingRight: "20px" }}>
                 Date:
               </Title>
-              <DatePicker placeholder="Pick date" variant="unstyled" />
+              <DatePicker
+                placeholder="Pick date"
+                variant="unstyled"
+                {...form.getInputProps("date")}
+              />
             </Box>
           </Collapse>
         </form>

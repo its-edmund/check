@@ -1,5 +1,5 @@
 import { createStyles, Paper, Text, ThemeIcon } from "@mantine/core";
-import React, { useState } from "react";
+import React from "react";
 import { Check } from "tabler-icons-react";
 
 type TaskProps = {
@@ -7,6 +7,7 @@ type TaskProps = {
   id: string;
   completed: boolean;
   toggleComplete: (id: string) => void;
+  date?: Date | undefined;
 };
 
 const useStyles = createStyles((theme) => ({
@@ -27,6 +28,7 @@ const useStyles = createStyles((theme) => ({
   uncompletedIcon: {
     height: "26px",
     width: "26px",
+    aspectRatio: "1",
     borderRadius: "10px",
     marginRight: "15px",
     border:
@@ -37,9 +39,14 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Task = ({ name = "", id, completed, toggleComplete }: TaskProps) => {
+const Task = ({
+  name = "",
+  id,
+  completed,
+  toggleComplete,
+  date,
+}: TaskProps) => {
   const { classes } = useStyles();
-  const [completedState, setCompletedState] = useState(false);
 
   return (
     <>
@@ -59,8 +66,24 @@ const Task = ({ name = "", id, completed, toggleComplete }: TaskProps) => {
             onClick={() => toggleComplete(id)}
           ></div>
         )}
-        <Text sx={{ textDecoration: completed ? "line-through" : "none" }}>
+        <Text
+          sx={{
+            textDecoration: completed ? "line-through" : "none",
+            width: "100%",
+          }}
+        >
           {name}
+        </Text>
+        <Text
+          sx={(theme) => ({
+            whiteSpace: "nowrap",
+            color:
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[3]
+                : theme.colors.gray[5],
+          })}
+        >
+          {date ? date.toDateString() : ""}
         </Text>
       </Paper>
     </>

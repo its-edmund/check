@@ -10,8 +10,7 @@ import {
 import AddItem from "./AddItem";
 import Task from "./Task";
 import { TaskType } from "../../types/Task";
-import { useForm } from "@mantine/hooks";
-import { IconCheck, IconInbox, IconMoodSad } from "@tabler/icons";
+import { IconCheck, IconMoodSad } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -41,7 +40,7 @@ const Inbox = () => {
   ]);
   const { classes } = useStyles();
 
-  const addTask = (name: string) => {
+  const addTask = (name: string, date: Date | undefined) => {
     setTasks((tasks) => {
       return [
         ...tasks,
@@ -49,6 +48,7 @@ const Inbox = () => {
           name,
           completed: false,
           id: `${name.replaceAll(" ", "_")}_${Date.now()}`,
+          date,
         },
       ];
     });
@@ -88,6 +88,7 @@ const Inbox = () => {
                   id={task.id}
                   completed={task.completed}
                   toggleComplete={toggleComplete}
+                  date={task.date}
                 />
               );
             })
@@ -119,6 +120,7 @@ const Inbox = () => {
                   id={task.id}
                   completed={task.completed}
                   toggleComplete={toggleComplete}
+                  date={task.date}
                 />
               );
             })
