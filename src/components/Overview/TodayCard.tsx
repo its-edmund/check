@@ -19,6 +19,7 @@ const TodayCardStatic = React.forwardRef<HTMLDivElement, TodayCardProps>(
           color: "white",
           display: "flex",
           alignItems: "end",
+          cursor: "pointer",
         })}
       >
         <Group

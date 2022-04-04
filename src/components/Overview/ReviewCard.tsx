@@ -1,34 +1,35 @@
+import React from "react";
 import { Paper, Group, Title, Stack } from "@mantine/core";
 import { motion } from "framer-motion";
-import React from "react";
 
-type TomorrowCardProps = {
+type ReviewCardProps = {
   number: number;
 };
 
-const TomorrowCardStatic = React.forwardRef<HTMLDivElement, TomorrowCardProps>(
+const ReviewCardStatic = React.forwardRef<HTMLDivElement, ReviewCardProps>(
   (props, ref) => {
     return (
       <Paper
         ref={ref}
         radius="lg"
-        shadow="md"
+        shadow="lg"
         sx={(theme) => ({
           height: "190px",
-          background: theme.fn.linearGradient(50, "#36d946", "#9aed09"),
+          background: theme.fn.linearGradient(50, "#33b4ff", "#3358ff"),
           color: "white",
           display: "flex",
           alignItems: "end",
           cursor: "pointer",
+          width: "auto",
         })}
       >
         <Group
           direction="row"
           sx={(theme) => ({
             flexWrap: "nowrap",
-            marginLeft: "20px",
             marginBottom: "20px",
-            marginRight: "20px",
+            marginLeft: "20px",
+            marginRight: "40px",
             alignItems: "end",
           })}
         >
@@ -53,11 +54,11 @@ const TomorrowCardStatic = React.forwardRef<HTMLDivElement, TomorrowCardProps>(
             </Title>
             <Title
               sx={(theme) => ({
-                fontSize: "46px",
-                lineHeight: "38px",
+                fontSize: "48px",
+                lineHeight: "40px",
               })}
             >
-              tomorrow
+              review
             </Title>
           </Stack>
         </Group>
@@ -66,4 +67,4 @@ const TomorrowCardStatic = React.forwardRef<HTMLDivElement, TomorrowCardProps>(
   }
 );
 
-export default motion(TomorrowCardStatic);
+export default motion(ReviewCardStatic);

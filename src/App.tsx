@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   AppShell,
   ColorScheme,
@@ -10,7 +10,6 @@ import Inbox from "./components/Inbox/Inbox";
 import Sidebar from "./components/Navbar";
 import Today from "./components/Today/Today";
 import Overview from "./components/Overview/Overview";
-import axios from "./axios";
 
 const App = () => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
@@ -32,6 +31,9 @@ const App = () => {
                   theme.colorScheme === "dark"
                     ? theme.colors.dark[8]
                     : theme.colors.gray[0],
+                position: "absolute",
+                left: "150px",
+                minHeight: "100vh",
               },
             })}
           >

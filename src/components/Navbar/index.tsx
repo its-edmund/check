@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Calendar,
-  ChartBar,
-  Flag,
-  Inbox,
-  LayoutGrid,
-  Clock,
-} from "tabler-icons-react";
+import { ChartBar, Inbox } from "tabler-icons-react";
 import {
   Box,
   Navbar,
@@ -17,20 +10,14 @@ import {
   ThemeIcon,
   UnstyledButton,
   Modal,
-  AppShell,
-  Text,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
-import { IconLogout, IconPalette, IconSettings, IconUser } from "@tabler/icons";
-import DarkModeToggle from "./DarkModeToggle";
+import { IconLogout, IconSettings } from "@tabler/icons";
+import Settings from "./Settings";
 
 const data = [
   { label: "Overview", icon: ChartBar, link: "/overview" },
   { label: "Inbox", icon: Inbox, link: "/inbox" },
-  { label: "Today", icon: Calendar, link: "/today" },
-  { label: "Projects", icon: LayoutGrid, link: "/projects" },
-  { label: "Undated", icon: Clock, link: "/undated" },
-  { label: "Flagged", icon: Flag, link: "/flagged" },
 ];
 
 const useStyles = createStyles((theme) => ({
@@ -39,7 +26,6 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
     paddingBottom: 0,
     height: "100vh",
-    borderRadius: "16px 0 0 16px",
   },
 
   header: {
@@ -105,28 +91,11 @@ const useStyles = createStyles((theme) => ({
       color: theme.colorScheme === "dark" ? theme.white : theme.black,
     },
   },
-  navbarSetting: {
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
-    height: "480px",
-    borderRadius: "16px 0 0 16px",
-  },
-  setting: {
-    display: "flex",
-    width: "100%",
-    padding: `6px ${theme.spacing.md}px`,
-    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-    fontSize: theme.fontSizes.sm,
-    alignItems: "center",
-    borderRadius: "10px",
-
-    "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.blue[7]
-          : theme.colors.blue[1],
-      color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    },
+  settingsIcon: {
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.blue[3]
+        : theme.colors.blue[6],
   },
 }));
 
@@ -136,7 +105,13 @@ const Sidebar = () => {
   //const links = data.map((item) => <LinksGroup {...item} key={item.label} />);
 
   return (
-    <Navbar height={800} width={{ sm: 300 }} p="md" className={classes.navbar}>
+    <Navbar
+      height={800}
+      width={{ sm: 300 }}
+      p="md"
+      className={classes.navbar}
+      fixed
+    >
       <Navbar.Section className={classes.header}>
         <Title>todo.</Title>
       </Navbar.Section>
@@ -173,41 +148,7 @@ const Sidebar = () => {
           withCloseButton={false}
           padding={0}
         >
-          <AppShell
-            navbar={
-              <Navbar
-                className={classes.navbarSetting}
-                width={{ base: 250 }}
-                px="16px"
-                py="25px"
-              >
-                <Navbar.Section className={classes.setting}>
-                  <IconUser style={{ marginRight: "10px" }} />
-                  Account Settings
-                </Navbar.Section>
-                <Navbar.Section className={classes.setting}>
-                  <IconPalette style={{ marginRight: "10px" }} />
-                  Appearance
-                </Navbar.Section>
-              </Navbar>
-            }
-            styles={(theme) => ({
-              main: {
-                backgroundColor:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.dark[8]
-                    : theme.colors.gray[0],
-                borderRadius: "0 16px 16px 0",
-                padding: "25px 16px",
-              },
-            })}
-          >
-            <Title order={4}>Appearance</Title>
-            <Group>
-              <Text>Theme:</Text>
-              <DarkModeToggle />
-            </Group>
-          </AppShell>
+          <Settings />
         </Modal>
         <UnstyledButton
           className={classes.control}
@@ -220,7 +161,7 @@ const Sidebar = () => {
                 alignItems: "center",
               })}
             >
-              <IconSettings />
+              <IconSettings className={classes.settingsIcon} />
               <Box ml="md">Settings</Box>
             </Box>
           </Group>

@@ -19,6 +19,7 @@ const OverdueCardStatic = React.forwardRef<HTMLDivElement, OverdueCardProps>(
           color: "white",
           display: "flex",
           alignItems: "end",
+          cursor: "pointer",
         })}
       >
         <Group
