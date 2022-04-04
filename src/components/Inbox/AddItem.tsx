@@ -37,12 +37,13 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type AddItemProps = {
-  addTask: (name: string, date: Date | undefined) => void;
+  addTask: (name: string, date: number | undefined) => void;
 };
 
 const AddItem = ({ addTask }: AddItemProps) => {
   const [editing, setEditing] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [date, setDate] = useState();
 
   const { classes } = useStyles();
 
@@ -61,8 +62,12 @@ const AddItem = ({ addTask }: AddItemProps) => {
       <Paper shadow="md" radius="lg" className={classes.addItem}>
         <form
           onSubmit={form.onSubmit((values) => {
-            console.log(values);
-            addTask(values.name, values.date);
+            addTask(
+              values.name,
+              values.date
+                ? (values.date as unknown as Date).getTime()
+                : undefined
+            );
             setEditing(false);
             form.reset();
           })}
@@ -157,6 +162,7 @@ const AddItem = ({ addTask }: AddItemProps) => {
               <DatePicker
                 placeholder="Pick date"
                 variant="unstyled"
+                value={date}
                 {...form.getInputProps("date")}
               />
             </Box>

@@ -11,6 +11,7 @@ import AddItem from "./AddItem";
 import Task from "./Task";
 import { TaskType } from "../../types/Task";
 import { IconCheck, IconMoodSad } from "@tabler/icons";
+import axios from "../../axios";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -31,43 +32,51 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Inbox = () => {
-  const [tasks, setTasks] = useState<TaskType[]>([
-    {
-      name: "Clean room",
-      completed: true,
-      id: `Clean_room_${Date.now()}`,
-    },
-  ]);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
   const { classes } = useStyles();
 
-  const addTask = (name: string, date: Date | undefined) => {
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios.get("/tasks");
+      console.log(data);
+      setTasks(data);
+    };
+    getData();
+  }, []);
+
+  const addTask = async (name: string, date: number | undefined) => {
+    const { data } = await axios.post("/tasks", {
+      name,
+      date,
+    });
+
     setTasks((tasks) => {
-      return [
-        ...tasks,
-        {
-          name,
-          completed: false,
-          id: `${name.replaceAll(" ", "_")}_${Date.now()}`,
-          date,
-        },
-      ];
+      return [...tasks, data];
     });
 
     console.log(tasks);
   };
 
-  const toggleComplete = (id: string) => {
+  const toggleComplete = async (id: string) => {
+    await axios.patch(`/tasks/toggle/${id}`);
     setTasks((tasks) => {
       let newTasks = [...tasks];
-      const newIndex = newTasks.findIndex((task) => task.id === id);
+      const newIndex = newTasks.findIndex((task) => {
+        console.log(task._id);
+        return task._id === id;
+      });
       newTasks[newIndex].completed = !newTasks[newIndex].completed;
       return newTasks;
     });
   };
 
-  useEffect(() => {
-    console.log(tasks);
-  }, [tasks]);
+  const deleteTask = async (id: string) => {
+    await axios.delete(`/tasks/${id}`);
+    setTasks((tasks) => {
+      const newTasks = tasks.filter((task) => task._id !== id);
+      return newTasks;
+    });
+  };
 
   return (
     <Container size="sm">
@@ -83,12 +92,9 @@ const Inbox = () => {
             .map((task) => {
               return (
                 <Task
-                  name={task.name}
-                  key={task.id}
-                  id={task.id}
-                  completed={task.completed}
+                  task={task}
                   toggleComplete={toggleComplete}
-                  date={task.date}
+                  deleteTask={deleteTask}
                 />
               );
             })
@@ -115,12 +121,9 @@ const Inbox = () => {
             .map((task) => {
               return (
                 <Task
-                  name={task.name}
-                  key={task.id}
-                  id={task.id}
-                  completed={task.completed}
+                  task={task}
                   toggleComplete={toggleComplete}
-                  date={task.date}
+                  deleteTask={deleteTask}
                 />
               );
             })

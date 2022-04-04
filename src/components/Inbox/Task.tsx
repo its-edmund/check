@@ -1,13 +1,21 @@
-import { createStyles, Paper, Text, ThemeIcon } from "@mantine/core";
-import React from "react";
-import { Check } from "tabler-icons-react";
+import {
+  Button,
+  createStyles,
+  Menu,
+  Paper,
+  Text,
+  ThemeIcon,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { IconDotsVertical, IconEdit, IconTrash } from "@tabler/icons";
+import React, { useEffect, useState } from "react";
+import { Check, DotsVertical } from "tabler-icons-react";
+import { TaskType } from "../../types/Task";
 
 type TaskProps = {
-  name?: string;
-  id: string;
-  completed: boolean;
+  task: TaskType;
   toggleComplete: (id: string) => void;
-  date?: Date | undefined;
+  deleteTask: (id: string) => void;
 };
 
 const useStyles = createStyles((theme) => ({
@@ -39,40 +47,43 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Task = ({
-  name = "",
-  id,
-  completed,
-  toggleComplete,
-  date,
-}: TaskProps) => {
+const Task = ({ task, toggleComplete, deleteTask }: TaskProps) => {
+  const [dateString, setDateString] = useState("");
+  const [opened, handlers] = useDisclosure(false);
+
   const { classes } = useStyles();
+
+  useEffect(() => {
+    if (task.date) {
+      setDateString(new Date(task.date).toDateString());
+    }
+  }, []);
 
   return (
     <>
       <Paper shadow="md" radius="lg" className={classes.addItem}>
-        {completed ? (
+        {task.completed ? (
           <ThemeIcon
             variant="light"
             size={30}
             className={classes.completedIcon}
-            onClick={() => toggleComplete(id)}
+            onClick={() => toggleComplete(task._id)}
           >
             <Check />
           </ThemeIcon>
         ) : (
           <div
             className={classes.uncompletedIcon}
-            onClick={() => toggleComplete(id)}
+            onClick={() => toggleComplete(task._id)}
           ></div>
         )}
         <Text
           sx={{
-            textDecoration: completed ? "line-through" : "none",
+            textDecoration: task.completed ? "line-through" : "none",
             width: "100%",
           }}
         >
-          {name}
+          {task.name}
         </Text>
         <Text
           sx={(theme) => ({
@@ -83,8 +94,29 @@ const Task = ({
                 : theme.colors.gray[5],
           })}
         >
-          {date ? date.toDateString() : ""}
+          {dateString}
         </Text>
+        <Menu
+          opened={opened}
+          onOpen={handlers.open}
+          onClose={handlers.close}
+          control={
+            <Button variant="white">
+              <IconDotsVertical />
+            </Button>
+          }
+        >
+          <Menu.Item icon={<IconEdit size={14} />}>Edit task</Menu.Item>
+          <Menu.Item
+            color="red"
+            icon={<IconTrash size={14} />}
+            onClick={() => {
+              deleteTask(task._id);
+            }}
+          >
+            Delete
+          </Menu.Item>
+        </Menu>
       </Paper>
     </>
   );

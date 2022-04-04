@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Calendar,
   ChartBar,
@@ -16,8 +16,12 @@ import {
   Title,
   ThemeIcon,
   UnstyledButton,
+  Modal,
+  AppShell,
+  Text,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
+import { IconLogout, IconPalette, IconSettings, IconUser } from "@tabler/icons";
 import DarkModeToggle from "./DarkModeToggle";
 
 const data = [
@@ -35,6 +39,7 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
     paddingBottom: 0,
     height: "100vh",
+    borderRadius: "16px 0 0 16px",
   },
 
   header: {
@@ -58,9 +63,6 @@ const useStyles = createStyles((theme) => ({
   footer: {
     marginLeft: -theme.spacing.md,
     marginRight: -theme.spacing.md,
-    borderTop: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
   },
   control: {
     fontWeight: 500,
@@ -103,10 +105,34 @@ const useStyles = createStyles((theme) => ({
       color: theme.colorScheme === "dark" ? theme.white : theme.black,
     },
   },
+  navbarSetting: {
+    backgroundColor:
+      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
+    height: "480px",
+    borderRadius: "16px 0 0 16px",
+  },
+  setting: {
+    display: "flex",
+    width: "100%",
+    padding: `6px ${theme.spacing.md}px`,
+    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+    fontSize: theme.fontSizes.sm,
+    alignItems: "center",
+    borderRadius: "10px",
+
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.blue[7]
+          : theme.colors.blue[1],
+      color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    },
+  },
 }));
 
 const Sidebar = () => {
   const { classes } = useStyles();
+  const [opened, setOpened] = useState(false);
   //const links = data.map((item) => <LinksGroup {...item} key={item.label} />);
 
   return (
@@ -137,7 +163,84 @@ const Sidebar = () => {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <DarkModeToggle />
+        <Modal
+          centered
+          opened={opened}
+          onClose={() => setOpened(false)}
+          size="xl"
+          overflow="inside"
+          radius="lg"
+          withCloseButton={false}
+          padding={0}
+        >
+          <AppShell
+            navbar={
+              <Navbar
+                className={classes.navbarSetting}
+                width={{ base: 250 }}
+                px="16px"
+                py="25px"
+              >
+                <Navbar.Section className={classes.setting}>
+                  <IconUser style={{ marginRight: "10px" }} />
+                  Account Settings
+                </Navbar.Section>
+                <Navbar.Section className={classes.setting}>
+                  <IconPalette style={{ marginRight: "10px" }} />
+                  Appearance
+                </Navbar.Section>
+              </Navbar>
+            }
+            styles={(theme) => ({
+              main: {
+                backgroundColor:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[8]
+                    : theme.colors.gray[0],
+                borderRadius: "0 16px 16px 0",
+                padding: "25px 16px",
+              },
+            })}
+          >
+            <Title order={4}>Appearance</Title>
+            <Group>
+              <Text>Theme:</Text>
+              <DarkModeToggle />
+            </Group>
+          </AppShell>
+        </Modal>
+        <UnstyledButton
+          className={classes.control}
+          onClick={() => setOpened(true)}
+        >
+          <Group position="apart" spacing={0}>
+            <Box
+              sx={(theme) => ({
+                display: "flex",
+                alignItems: "center",
+              })}
+            >
+              <IconSettings />
+              <Box ml="md">Settings</Box>
+            </Box>
+          </Group>
+        </UnstyledButton>
+        <UnstyledButton className={classes.control}>
+          <Link to="#">
+            <Group position="apart" spacing={0}>
+              <Box
+                sx={(theme) => ({
+                  display: "flex",
+                  alignItems: "center",
+                  color: theme.colors.red[6],
+                })}
+              >
+                <IconLogout />
+                <Box ml="md">Log out</Box>
+              </Box>
+            </Group>
+          </Link>
+        </UnstyledButton>
       </Navbar.Section>
     </Navbar>
   );

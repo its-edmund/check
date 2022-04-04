@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppShell,
   ColorScheme,
@@ -10,11 +10,13 @@ import Inbox from "./components/Inbox/Inbox";
 import Sidebar from "./components/Navbar";
 import Today from "./components/Today/Today";
 import Overview from "./components/Overview/Overview";
+import axios from "./axios";
 
 const App = () => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   return (
     <ColorSchemeProvider
       colorScheme={colorScheme}
