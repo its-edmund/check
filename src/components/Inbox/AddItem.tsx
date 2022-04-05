@@ -162,6 +162,7 @@ const AddItem = ({ addTask }: AddItemProps) => {
               <DatePicker
                 placeholder="Pick date"
                 variant="unstyled"
+                firstDayOfWeek="sunday"
                 value={date}
                 {...form.getInputProps("date")}
               />

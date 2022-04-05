@@ -38,7 +38,6 @@ const Inbox = () => {
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios.get("/tasks");
-      console.log(data);
       setTasks(data);
     };
     getData();
@@ -53,8 +52,6 @@ const Inbox = () => {
     setTasks((tasks) => {
       return [...tasks, data];
     });
-
-    console.log(tasks);
   };
 
   const toggleComplete = async (id: string) => {
@@ -66,6 +63,28 @@ const Inbox = () => {
         return task._id === id;
       });
       newTasks[newIndex].completed = !newTasks[newIndex].completed;
+      return newTasks;
+    });
+  };
+
+  const updateTask = async (
+    id: string,
+    name: string,
+    date: number | undefined
+  ) => {
+    await axios.patch(`/tasks/${id}`, {
+      name,
+      date,
+    });
+
+    setTasks((tasks) => {
+      let newTasks = [...tasks];
+      const newIndex = newTasks.findIndex((task) => {
+        return task._id === id;
+      });
+      console.log(date);
+      newTasks[newIndex].name = name;
+      newTasks[newIndex].date = date;
       return newTasks;
     });
   };
@@ -95,6 +114,7 @@ const Inbox = () => {
                   task={task}
                   toggleComplete={toggleComplete}
                   deleteTask={deleteTask}
+                  updateTask={updateTask}
                 />
               );
             })
@@ -124,6 +144,7 @@ const Inbox = () => {
                   task={task}
                   toggleComplete={toggleComplete}
                   deleteTask={deleteTask}
+                  updateTask={updateTask}
                 />
               );
             })
