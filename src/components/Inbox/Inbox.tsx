@@ -3,6 +3,7 @@ import {
   Center,
   Container,
   createStyles,
+  Loader,
   Stack,
   Text,
   Title,
@@ -34,13 +35,18 @@ const useStyles = createStyles((theme) => ({
 const Inbox = () => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const { classes } = useStyles();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios.get("/tasks");
-      setTasks(data);
+      axios.get("/tasks").then((result) => {
+        setTasks(result.data);
+        setLoading(false);
+      });
     };
+
     getData();
+    sortTasksByDate();
   }, []);
 
   const addTask = async (name: string, date: number | undefined) => {
@@ -52,6 +58,8 @@ const Inbox = () => {
     setTasks((tasks) => {
       return [...tasks, data];
     });
+
+    sortTasksByDate();
   };
 
   const toggleComplete = async (id: string) => {
@@ -63,6 +71,14 @@ const Inbox = () => {
         return task._id === id;
       });
       newTasks[newIndex].completed = !newTasks[newIndex].completed;
+      return newTasks;
+    });
+  };
+
+  const sortTasksByDate = () => {
+    setTasks((tasks) => {
+      let newTasks = [...tasks];
+      newTasks.sort((a, b) => (a.date ? a.date : 0) - (b.date ? b.date : 0));
       return newTasks;
     });
   };
@@ -87,6 +103,7 @@ const Inbox = () => {
       newTasks[newIndex].date = date;
       return newTasks;
     });
+    sortTasksByDate();
   };
 
   const deleteTask = async (id: string) => {
@@ -95,72 +112,97 @@ const Inbox = () => {
       const newTasks = tasks.filter((task) => task._id !== id);
       return newTasks;
     });
+    sortTasksByDate();
   };
 
   return (
     <Container size="sm">
-      <Title className={classes.header}>Inbox</Title>
-      <AddItem addTask={addTask} />
-      <Title className={classes.subheader} order={4}>
-        Tasks
-      </Title>
-      <Stack spacing="sm">
-        {tasks.filter((task) => !task.completed).length > 0 ? (
-          tasks
-            .filter((task) => !task.completed)
-            .map((task) => {
-              return (
-                <Task
-                  task={task}
-                  toggleComplete={toggleComplete}
-                  deleteTask={deleteTask}
-                  updateTask={updateTask}
-                />
-              );
-            })
-        ) : (
-          <Center
-            className={classes.emptyState}
-            sx={(theme) => ({
-              display: "flex",
-              flexDirection: "column",
-            })}
-          >
-            <IconCheck height="50" width="50" />
-            <Text>You're all set!</Text>
-          </Center>
-        )}
-      </Stack>
-      <Title className={classes.subheader} order={4}>
-        Completed
-      </Title>
-      <Stack spacing="sm">
-        {tasks.filter((task) => task.completed).length > 0 ? (
-          tasks
-            .filter((task) => task.completed)
-            .map((task) => {
-              return (
-                <Task
-                  task={task}
-                  toggleComplete={toggleComplete}
-                  deleteTask={deleteTask}
-                  updateTask={updateTask}
-                />
-              );
-            })
-        ) : (
-          <Center
-            className={classes.emptyState}
-            sx={(theme) => ({
-              display: "flex",
-              flexDirection: "column",
-            })}
-          >
-            <IconMoodSad height="50" width="50" />
-            <Text>Nothing completed yet!</Text>
-          </Center>
-        )}
-      </Stack>
+      {loading ? (
+        <Loader
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      ) : (
+        <>
+          <Title className={classes.header}>Inbox</Title>
+          <AddItem addTask={addTask} />
+          <Title className={classes.subheader} order={4}>
+            Tasks
+          </Title>
+          <Stack spacing="sm">
+            {tasks.filter((task) => !task.completed).length > 0 ? (
+              tasks
+                .filter((task) => !task.completed)
+                .map((task) => {
+                  return (
+                    <Task
+                      layout
+                      key={task._id}
+                      task={task}
+                      toggleComplete={toggleComplete}
+                      deleteTask={deleteTask}
+                      updateTask={updateTask}
+                      whileHover={{
+                        scale: 1.03,
+                        transition: { duration: 0.05, delay: 0 },
+                      }}
+                    />
+                  );
+                })
+            ) : (
+              <Center
+                className={classes.emptyState}
+                sx={(theme) => ({
+                  display: "flex",
+                  flexDirection: "column",
+                })}
+              >
+                <IconCheck height="50" width="50" />
+                <Text>You're all set!</Text>
+              </Center>
+            )}
+          </Stack>
+          <Title className={classes.subheader} order={4}>
+            Completed
+          </Title>
+          <Stack spacing="sm">
+            {tasks.filter((task) => task.completed).length > 0 ? (
+              tasks
+                .filter((task) => task.completed)
+                .map((task) => {
+                  return (
+                    <Task
+                      key={task._id}
+                      task={task}
+                      toggleComplete={toggleComplete}
+                      deleteTask={deleteTask}
+                      updateTask={updateTask}
+                      whileHover={{
+                        scale: 1.03,
+                        transition: { duration: 0.05, delay: 0 },
+                      }}
+                    />
+                  );
+                })
+            ) : (
+              <Center
+                className={classes.emptyState}
+                sx={(theme) => ({
+                  display: "flex",
+                  flexDirection: "column",
+                })}
+              >
+                <IconMoodSad height="50" width="50" />
+                <Text>Nothing completed yet!</Text>
+              </Center>
+            )}
+          </Stack>
+        </>
+      )}
     </Container>
   );
 };
