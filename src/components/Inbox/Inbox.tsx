@@ -83,6 +83,10 @@ const Inbox = () => {
     });
   };
 
+  useEffect(() => {
+    console.log(tasks);
+  }, [tasks]);
+
   const updateTask = async (
     id: string,
     name: string,
