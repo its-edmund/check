@@ -39,27 +39,26 @@ const Inbox = () => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const { classes } = useStyles();
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState<Boolean>(
-    localStorage.getItem("jwt_token") !== null
-  );
+  const [token, setToken] = useState(localStorage.getItem("jwt_token"));
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(localStorage.getItem("jwt_token"));
-    if (!loggedIn) {
+    if (!token) {
       navigate("/login");
     } else {
       navigate("/inbox");
     }
-  }, [loggedIn]);
+  }, [navigate, token]);
 
   useEffect(() => {
     const getData = async () => {
-      axios.get("/tasks").then((result) => {
-        setTasks(result.data);
-        setLoading(false);
-      });
+      axios
+        .get("/tasks", { headers: { "x-access-token": token! } })
+        .then((result) => {
+          setTasks(result.data);
+          setLoading(false);
+        });
     };
 
     getData();

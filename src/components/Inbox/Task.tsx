@@ -11,7 +11,7 @@ import { DatePicker } from "@mantine/dates";
 import { useDisclosure, useForm } from "@mantine/hooks";
 import { IconDotsVertical, IconEdit, IconTrash } from "@tabler/icons";
 import React, { useEffect, useState } from "react";
-import { ArrowNarrowRight, Check, DotsVertical, X } from "tabler-icons-react";
+import { ArrowNarrowRight, Check, X } from "tabler-icons-react";
 import { TaskType } from "../../types/Task";
 import { motion } from "framer-motion";
 
