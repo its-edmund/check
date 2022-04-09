@@ -66,10 +66,19 @@ const Inbox = () => {
   }, []);
 
   const addTask = async (name: string, date: number | undefined) => {
-    const { data } = await axios.post("/tasks", {
-      name,
-      date,
-    });
+    const { data } = await axios.post(
+      "/tasks",
+      {
+        name,
+        date,
+        token: token as string,
+      },
+      {
+        headers: {
+          "x-access-token": token!,
+        },
+      }
+    );
 
     setTasks((tasks) => {
       return [...tasks, data];
@@ -79,11 +88,16 @@ const Inbox = () => {
   };
 
   const toggleComplete = async (id: string) => {
-    await axios.patch(`/tasks/toggle/${id}`);
+    await axios.patch(
+      `/tasks/toggle/${id}`,
+      {},
+      {
+        headers: { "x-access-token": token! },
+      }
+    );
     setTasks((tasks) => {
       let newTasks = [...tasks];
       const newIndex = newTasks.findIndex((task) => {
-        console.log(task._id);
         return task._id === id;
       });
       newTasks[newIndex].completed = !newTasks[newIndex].completed;
@@ -108,10 +122,14 @@ const Inbox = () => {
     name: string,
     date: number | undefined
   ) => {
-    await axios.patch(`/tasks/${id}`, {
-      name,
-      date,
-    });
+    await axios.patch(
+      `/tasks/${id}`,
+      {
+        name,
+        date,
+      },
+      { headers: { "x-access-token": token! } }
+    );
 
     setTasks((tasks) => {
       let newTasks = [...tasks];
@@ -127,7 +145,9 @@ const Inbox = () => {
   };
 
   const deleteTask = async (id: string) => {
-    await axios.delete(`/tasks/${id}`);
+    await axios.delete(`/tasks/${id}`, {
+      headers: { "x-access-token": token! },
+    });
     setTasks((tasks) => {
       const newTasks = tasks.filter((task) => task._id !== id);
       return newTasks;
