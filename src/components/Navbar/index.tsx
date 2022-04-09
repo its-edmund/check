@@ -167,7 +167,12 @@ const Sidebar = () => {
           </Group>
         </UnstyledButton>
         <UnstyledButton className={classes.control}>
-          <Link to="#">
+          <Link
+            to="/"
+            onClick={() => {
+              localStorage.clear();
+            }}
+          >
             <Group position="apart" spacing={0}>
               <Box
                 sx={(theme) => ({

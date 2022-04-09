@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppShell,
   ColorScheme,
@@ -6,10 +6,12 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router";
 import Inbox from "./components/Inbox/Inbox";
 import Sidebar from "./components/Navbar";
 import Today from "./components/Today/Today";
 import Overview from "./components/Overview/Overview";
+import Login from "./components/Login/Login";
 
 const App = () => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
@@ -23,26 +25,13 @@ const App = () => {
     >
       <MantineProvider theme={{ colorScheme }}>
         <BrowserRouter>
-          <AppShell
-            navbar={<Sidebar />}
-            styles={(theme) => ({
-              main: {
-                backgroundColor:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.dark[8]
-                    : theme.colors.gray[0],
-                position: "absolute",
-                left: "150px",
-                minHeight: "100vh",
-              },
-            })}
-          >
-            <Routes>
-              <Route path="/inbox" element={<Inbox />} />
-              <Route path="/overview" element={<Overview />} />
-              <Route path="/today" element={<Today />} />
-            </Routes>
-          </AppShell>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/inbox" element={<Inbox />} />
+            <Route path="/overview" element={<Overview />} />
+            <Route path="/today" element={<Today />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
         </BrowserRouter>
       </MantineProvider>
     </ColorSchemeProvider>

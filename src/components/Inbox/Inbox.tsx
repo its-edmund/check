@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  AppShell,
   Center,
   Container,
   createStyles,
@@ -13,6 +14,8 @@ import Task from "./Task";
 import { TaskType } from "../../types/Task";
 import { IconCheck, IconMoodSad } from "@tabler/icons";
 import axios from "../../axios";
+import Sidebar from "../Navbar";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -36,6 +39,20 @@ const Inbox = () => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const { classes } = useStyles();
   const [loading, setLoading] = useState(true);
+  const [loggedIn, setLoggedIn] = useState<Boolean>(
+    localStorage.getItem("jwt_token") !== null
+  );
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(localStorage.getItem("jwt_token"));
+    if (!loggedIn) {
+      navigate("/login");
+    } else {
+      navigate("/inbox");
+    }
+  }, [loggedIn]);
 
   useEffect(() => {
     const getData = async () => {
@@ -120,94 +137,109 @@ const Inbox = () => {
   };
 
   return (
-    <Container size="sm">
-      {loading ? (
-        <Loader
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        />
-      ) : (
-        <>
-          <Title className={classes.header}>Inbox</Title>
-          <AddItem addTask={addTask} />
-          <Title className={classes.subheader} order={4}>
-            Tasks
-          </Title>
-          <Stack spacing="sm">
-            {tasks.filter((task) => !task.completed).length > 0 ? (
-              tasks
-                .filter((task) => !task.completed)
-                .map((task) => {
-                  return (
-                    <Task
-                      layout
-                      key={task._id}
-                      task={task}
-                      toggleComplete={toggleComplete}
-                      deleteTask={deleteTask}
-                      updateTask={updateTask}
-                      whileHover={{
-                        scale: 1.03,
-                        transition: { duration: 0.05, delay: 0 },
-                      }}
-                    />
-                  );
-                })
-            ) : (
-              <Center
-                className={classes.emptyState}
-                sx={(theme) => ({
-                  display: "flex",
-                  flexDirection: "column",
-                })}
-              >
-                <IconCheck height="50" width="50" />
-                <Text>You're all set!</Text>
-              </Center>
-            )}
-          </Stack>
-          <Title className={classes.subheader} order={4}>
-            Completed
-          </Title>
-          <Stack spacing="sm">
-            {tasks.filter((task) => task.completed).length > 0 ? (
-              tasks
-                .filter((task) => task.completed)
-                .map((task) => {
-                  return (
-                    <Task
-                      key={task._id}
-                      task={task}
-                      toggleComplete={toggleComplete}
-                      deleteTask={deleteTask}
-                      updateTask={updateTask}
-                      whileHover={{
-                        scale: 1.03,
-                        transition: { duration: 0.05, delay: 0 },
-                      }}
-                    />
-                  );
-                })
-            ) : (
-              <Center
-                className={classes.emptyState}
-                sx={(theme) => ({
-                  display: "flex",
-                  flexDirection: "column",
-                })}
-              >
-                <IconMoodSad height="50" width="50" />
-                <Text>Nothing completed yet!</Text>
-              </Center>
-            )}
-          </Stack>
-        </>
-      )}
-    </Container>
+    <AppShell
+      navbar={<Sidebar />}
+      styles={(theme) => ({
+        main: {
+          backgroundColor:
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[8]
+              : theme.colors.gray[0],
+          position: "absolute",
+          left: "150px",
+          minHeight: "100vh",
+        },
+      })}
+    >
+      <Container size="sm">
+        {loading ? (
+          <Loader
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        ) : (
+          <>
+            <Title className={classes.header}>Inbox</Title>
+            <AddItem addTask={addTask} />
+            <Title className={classes.subheader} order={4}>
+              Tasks
+            </Title>
+            <Stack spacing="sm">
+              {tasks.filter((task) => !task.completed).length > 0 ? (
+                tasks
+                  .filter((task) => !task.completed)
+                  .map((task) => {
+                    return (
+                      <Task
+                        layout
+                        key={task._id}
+                        task={task}
+                        toggleComplete={toggleComplete}
+                        deleteTask={deleteTask}
+                        updateTask={updateTask}
+                        whileHover={{
+                          scale: 1.03,
+                          transition: { duration: 0.05, delay: 0 },
+                        }}
+                      />
+                    );
+                  })
+              ) : (
+                <Center
+                  className={classes.emptyState}
+                  sx={(theme) => ({
+                    display: "flex",
+                    flexDirection: "column",
+                  })}
+                >
+                  <IconCheck height="50" width="50" />
+                  <Text>You're all set!</Text>
+                </Center>
+              )}
+            </Stack>
+            <Title className={classes.subheader} order={4}>
+              Completed
+            </Title>
+            <Stack spacing="sm">
+              {tasks.filter((task) => task.completed).length > 0 ? (
+                tasks
+                  .filter((task) => task.completed)
+                  .map((task) => {
+                    return (
+                      <Task
+                        key={task._id}
+                        task={task}
+                        toggleComplete={toggleComplete}
+                        deleteTask={deleteTask}
+                        updateTask={updateTask}
+                        whileHover={{
+                          scale: 1.03,
+                          transition: { duration: 0.05, delay: 0 },
+                        }}
+                      />
+                    );
+                  })
+              ) : (
+                <Center
+                  className={classes.emptyState}
+                  sx={(theme) => ({
+                    display: "flex",
+                    flexDirection: "column",
+                  })}
+                >
+                  <IconMoodSad height="50" width="50" />
+                  <Text>Nothing completed yet!</Text>
+                </Center>
+              )}
+            </Stack>
+          </>
+        )}
+      </Container>
+    </AppShell>
   );
 };
 
