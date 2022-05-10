@@ -1,3 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../public/fonts/Gilroy-Thin.ttf");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../public/fonts/Gilroy-UltraLight.ttf");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../public/fonts/Gilroy-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../public/fonts/Gilroy-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../public/fonts/Gilroy-Medium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../public/fonts/Gilroy-Semibold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../public/fonts/Gilroy-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("../public/fonts/Gilroy-Extrabold.ttf");
+  font-weight: 800;
+}
+
 a {
   text-decoration: inherit;
   color: inherit;
@@ -5,4 +57,32 @@ a {
 
 body {
   margin: 0px;
+}
+
+@layer components {
+  .btn-primary {
+    @apply font-bold border-2 bg-gradient-to-r from-green-400 to-teal-400 border-black rounded-full px-3 hover:from-black hover:to-black text-black hover:text-white;
+  }
+
+  .textarea-wrap {
+    display: grid;
+  }
+
+  .textarea-wrap::after {
+    content: attr(data-replicated-value) " ";
+    white-space: pre-wrap;
+    visibility: hidden;
+  }
+
+  .textarea-wrap > textarea {
+    resize: none;
+    overflow: hidden;
+  }
+
+  .text-wrap > textarea, .text-wrap::after {
+    border: 1px solid black;
+    padding: 0.5rem;
+    font: inherit;
+    grid-area: 1 / 1 / 2 / 2;
+  }
 }

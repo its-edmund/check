@@ -12,29 +12,24 @@ import Sidebar from "./components/Navbar";
 import Today from "./components/Today/Today";
 import Overview from "./components/Overview/Overview";
 import Login from "./components/Login/Login";
+import Docs from "./components/Docs/Docs";
+import Editor from "./components/Docs/Editor";
 
 const App = () => {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  localStorage.theme = "light";
 
   return (
-    <ColorSchemeProvider
-      colorScheme={colorScheme}
-      toggleColorScheme={toggleColorScheme}
-    >
-      <MantineProvider theme={{ colorScheme }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/inbox" element={<Inbox />} />
-            <Route path="/overview" element={<Overview />} />
-            <Route path="/today" element={<Today />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </BrowserRouter>
-      </MantineProvider>
-    </ColorSchemeProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="inbox" element={<Inbox />} />
+        <Route path="overview" element={<Overview />} />
+        <Route path="today" element={<Today />} />
+        <Route path="login" element={<Login />} />
+        <Route path="docs" element={<Docs />} />
+        <Route path="docs/:id" element={<Editor />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

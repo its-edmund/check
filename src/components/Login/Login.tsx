@@ -1,14 +1,35 @@
-import { Button, Center, Stack, TextInput } from "@mantine/core";
+import {
+  Button,
+  Center,
+  Stack,
+  TextInput,
+  Title,
+  Alert,
+  Box,
+  Text,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { AlertCircle } from "tabler-icons-react";
 import axios from "../../axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginFailed, setLoginFailed] = useState(false);
   const navigate = useNavigate();
 
   const token = localStorage.getItem("jwt_token");
+
+  const form = useForm({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validate: (values) => ({
+      username: values.username.length === 0 ? "Username is empty" : null,
+      password: values.password.length === 0 ? "Password is empty" : null,
+    }),
+  });
 
   useEffect(() => {
     if (token) {
@@ -16,7 +37,7 @@ const Login = () => {
     }
   }, [navigate, token]);
 
-  const login = async () => {
+  const login = async (username: string, password: string) => {
     try {
       const response = await axios.post("/auth/login", {
         username,
@@ -26,36 +47,56 @@ const Login = () => {
       localStorage.setItem("jwt_token", response.data.token);
       navigate("/inbox");
     } catch (err) {
-      console.log("login is incorrect");
+      setLoginFailed(true);
     }
   };
 
   return (
     <Center sx={(theme) => ({ height: "100vh" })}>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          login();
+        onSubmit={form.onSubmit((values) =>
+          login(values.username, values.password)
+        )}
+        onChange={() => {
+          setLoginFailed(false);
         }}
       >
-        <Stack>
-          <TextInput
+        <Stack
+          justify="center"
+          sx={() => ({
+            width: "20vw",
+          })}
+        >
+          <h1 className="text-3xl font-extrabold">Login</h1>
+          {loginFailed ? (
+            <Box
+              sx={(theme) => ({
+                backgroundColor: theme.colors.red[5],
+                padding: "16px 8px",
+                color: "white",
+                textAlign: "center",
+                borderRadius: "8px",
+              })}
+            >
+              <Text>Incorrect username or password!</Text>
+            </Box>
+          ) : (
+            <></>
+          )}
+          <input
+            className="rounded-full border-2 border-black text-lg px-3 py-1 font-bold"
             placeholder="Username"
-            type="text"
-            radius="md"
-            value={username}
-            onChange={(e) => setUsername(e.currentTarget.value)}
+            {...form.getInputProps("username")}
           />
-          <TextInput
+          <input
+            className="rounded-full border-2 border-black text-lg px-3 py-1 font-bold"
             placeholder="Password"
             type="password"
-            radius="md"
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
+            {...form.getInputProps("password")}
           />
-          <Button type="submit" radius="md">
+          <button className="font-bold border-2 bg-gradient-to-r from-green-400 to-teal-400 border-black rounded-full py-2 px-5 hover:from-black hover:to-black text-black hover:text-white mr-5 w-full">
             Login
-          </Button>
+          </button>
         </Stack>
       </form>
     </Center>

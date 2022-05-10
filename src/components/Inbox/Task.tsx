@@ -75,7 +75,7 @@ const Task = React.forwardRef<HTMLDivElement, TaskProps>(
 
     return (
       <>
-        <Paper shadow="sm" radius="lg" className={classes.addItem} ref={ref}>
+        <Paper shadow="sm" radius="md" className={classes.addItem} ref={ref}>
           <form
             onSubmit={form.onSubmit((values) => {
               updateTask(

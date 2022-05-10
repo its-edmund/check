@@ -156,20 +156,8 @@ const Inbox = () => {
   };
 
   return (
-    <AppShell
-      navbar={<Sidebar />}
-      styles={(theme) => ({
-        main: {
-          backgroundColor:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
-          position: "absolute",
-          left: "150px",
-          minHeight: "100vh",
-        },
-      })}
-    >
+    <>
+      <Sidebar />
       <Container size="sm">
         {loading ? (
           <Loader
@@ -258,7 +246,7 @@ const Inbox = () => {
           </>
         )}
       </Container>
-    </AppShell>
+    </>
   );
 };
 

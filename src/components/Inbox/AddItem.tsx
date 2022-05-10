@@ -59,7 +59,7 @@ const AddItem = ({ addTask }: AddItemProps) => {
 
   return (
     <>
-      <Paper shadow="md" radius="lg" className={classes.addItem}>
+      <Paper shadow="md" radius="md" className={classes.addItem}>
         <form
           onSubmit={form.onSubmit((values) => {
             addTask(
