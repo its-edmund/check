@@ -1,15 +1,10 @@
 import React from "react";
-import {
-  createStyles,
-  Switch,
-  Group,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { createStyles, Switch, Group, useMantineColorScheme } from "@mantine/core";
 import { Sun, MoonStars } from "tabler-icons-react";
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(theme => ({
   root: {
-    position: "relative",
+    "position": "relative",
     "& *": {
       cursor: "pointer",
     },
@@ -42,11 +37,7 @@ const DarkModeToggle = () => {
       <div className={classes.root}>
         <Sun className={cx(classes.icon, classes.iconLight)} size={18} />
         <MoonStars className={cx(classes.icon, classes.iconDark)} size={18} />
-        <Switch
-          checked={colorScheme === "dark"}
-          onChange={() => toggleColorScheme()}
-          size="md"
-        />
+        <Switch checked={colorScheme === "dark"} onChange={() => toggleColorScheme()} size="md" />
       </div>
     </Group>
   );

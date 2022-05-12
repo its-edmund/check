@@ -28,6 +28,7 @@
     "framer-motion": "^6.2.8",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-router": "^6.3.0",
     "react-router-dom": "6",
     "react-scripts": "5.0.0",
     "tabler-icons-react": "^1.43.0",
@@ -38,13 +39,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "eject": "react-scripts eject",
+    "lint": "eslint src/ --fix; stylelint src/**/*.css --fix; prettier src/ --write"
   },
   "browserslist": {
     "production": [
@@ -59,9 +55,22 @@
     ]
   },
   "devDependencies": {
+    "@its-edmund/eslint-config-react": "^1.0.0",
+    "@its-edmund/prettier-config": "^0.0.1",
+    "@its-edmund/stylelint-config": "^1.2.4",
     "autoprefixer": "^10.4.5",
     "css": "^3.0.0",
+    "eslint": "^8.15.0",
     "postcss": "^8.4.13",
+    "prettier": "^2.6.2",
+    "stylelint": "^14.8.2",
     "tailwind": "^4.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@its-edmund/eslint-config-react"
+  },
+  "prettier": "@its-edmund/prettier-config",
+  "stylelint": {
+    "extends": "@its-edmund/stylelint-config"
   }
 }

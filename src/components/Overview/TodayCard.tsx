@@ -6,64 +6,60 @@ type TodayCardProps = {
   number: number;
 };
 
-const TodayCardStatic = React.forwardRef<HTMLDivElement, TodayCardProps>(
-  (props, ref) => {
-    return (
-      <Paper
-        ref={ref}
-        radius="lg"
-        shadow="lg"
-        sx={(theme) => ({
-          height: "190px",
-          background: theme.fn.linearGradient(50, "#cc4dff", "#6a2fe0"),
-          color: "white",
-          display: "flex",
-          alignItems: "end",
-          cursor: "pointer",
+const TodayCardStatic = React.forwardRef<HTMLDivElement, TodayCardProps>((props, ref) => (
+  <Paper
+    ref={ref}
+    radius="lg"
+    shadow="lg"
+    sx={theme => ({
+      height: "190px",
+      background: theme.fn.linearGradient(50, "#cc4dff", "#6a2fe0"),
+      color: "white",
+      display: "flex",
+      alignItems: "end",
+      cursor: "pointer",
+    })}
+  >
+    <Group
+      direction="row"
+      sx={theme => ({
+        flexWrap: "nowrap",
+        marginBottom: "20px",
+        marginLeft: "20px",
+        marginRight: "40px",
+        alignItems: "end",
+      })}
+    >
+      <Title
+        sx={theme => ({
+          fontSize: "100px",
+          fontWeight: "700",
+          lineHeight: "70px",
+          marginRight: "-9px",
         })}
       >
-        <Group
-          direction="row"
-          sx={(theme) => ({
-            flexWrap: "nowrap",
-            marginBottom: "20px",
-            marginLeft: "20px",
-            marginRight: "40px",
-            alignItems: "end",
+        {props.number}
+      </Title>
+      <Stack spacing={0}>
+        <Title
+          sx={theme => ({
+            fontSize: "20px",
+            lineHeight: "15px",
           })}
         >
-          <Title
-            sx={(theme) => ({
-              fontSize: "100px",
-              fontWeight: "700",
-              lineHeight: "70px",
-              marginRight: "-9px",
-            })}
-          >
-            {props.number}
-          </Title>
-          <Stack spacing={0}>
-            <Title
-              sx={(theme) => ({
-                fontSize: "20px",
-                lineHeight: "15px",
-              })}
-            >
-              tasks for
-            </Title>
-            <Title
-              sx={(theme) => ({
-                fontSize: "48px",
-                lineHeight: "40px",
-              })}
-            >
-              today
-            </Title>
-          </Stack>
-        </Group>
-      </Paper>
-    );
-  }
-);
+          tasks for
+        </Title>
+        <Title
+          sx={theme => ({
+            fontSize: "48px",
+            lineHeight: "40px",
+          })}
+        >
+          today
+        </Title>
+      </Stack>
+    </Group>
+  </Paper>
+));
 
 export default motion(TodayCardStatic);

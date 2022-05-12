@@ -9,15 +9,16 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { IconCheck, IconMoodSad } from "@tabler/icons";
+import { useNavigate } from "react-router-dom";
+
 import AddItem from "./AddItem";
 import Task from "./Task";
 import { TaskType } from "../../types/Task";
-import { IconCheck, IconMoodSad } from "@tabler/icons";
 import axios from "../../axios";
 import Sidebar from "../Navbar";
-import { useNavigate } from "react-router-dom";
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(theme => ({
   header: {
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
     marginBottom: "20px",
@@ -28,10 +29,7 @@ const useStyles = createStyles((theme) => ({
     marginTop: "20px",
   },
   emptyState: {
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[3]
-        : theme.colors.gray[5],
+    color: theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[5],
   },
 }));
 
@@ -51,14 +49,20 @@ const Inbox = () => {
     }
   }, [navigate, token]);
 
+  const sortTasksByDate = () => {
+    setTasks(tasks => {
+      const newTasks = [...tasks];
+      newTasks.sort((a, b) => (a.date ? a.date : 0) - (b.date ? b.date : 0));
+      return newTasks;
+    });
+  };
+
   useEffect(() => {
     const getData = async () => {
-      axios
-        .get("/tasks", { headers: { "x-access-token": token! } })
-        .then((result) => {
-          setTasks(result.data);
-          setLoading(false);
-        });
+      axios.get("/tasks", { headers: { "x-access-token": token! } }).then(result => {
+        setTasks(result.data);
+        setLoading(false);
+      });
     };
 
     getData();
@@ -80,9 +84,7 @@ const Inbox = () => {
       }
     );
 
-    setTasks((tasks) => {
-      return [...tasks, data];
-    });
+    setTasks(tasks => [...tasks, data]);
 
     sortTasksByDate();
   };
@@ -95,20 +97,10 @@ const Inbox = () => {
         headers: { "x-access-token": token! },
       }
     );
-    setTasks((tasks) => {
-      let newTasks = [...tasks];
-      const newIndex = newTasks.findIndex((task) => {
-        return task._id === id;
-      });
+    setTasks(tasks => {
+      const newTasks = [...tasks];
+      const newIndex = newTasks.findIndex(task => task._id === id);
       newTasks[newIndex].completed = !newTasks[newIndex].completed;
-      return newTasks;
-    });
-  };
-
-  const sortTasksByDate = () => {
-    setTasks((tasks) => {
-      let newTasks = [...tasks];
-      newTasks.sort((a, b) => (a.date ? a.date : 0) - (b.date ? b.date : 0));
       return newTasks;
     });
   };
@@ -117,11 +109,7 @@ const Inbox = () => {
     console.log(tasks);
   }, [tasks]);
 
-  const updateTask = async (
-    id: string,
-    name: string,
-    date: number | undefined
-  ) => {
+  const updateTask = async (id: string, name: string, date: number | undefined) => {
     await axios.patch(
       `/tasks/${id}`,
       {
@@ -131,11 +119,9 @@ const Inbox = () => {
       { headers: { "x-access-token": token! } }
     );
 
-    setTasks((tasks) => {
-      let newTasks = [...tasks];
-      const newIndex = newTasks.findIndex((task) => {
-        return task._id === id;
-      });
+    setTasks(tasks => {
+      const newTasks = [...tasks];
+      const newIndex = newTasks.findIndex(task => task._id === id);
       console.log(date);
       newTasks[newIndex].name = name;
       newTasks[newIndex].date = date;
@@ -148,8 +134,8 @@ const Inbox = () => {
     await axios.delete(`/tasks/${id}`, {
       headers: { "x-access-token": token! },
     });
-    setTasks((tasks) => {
-      const newTasks = tasks.filter((task) => task._id !== id);
+    setTasks(tasks => {
+      const newTasks = tasks.filter(task => task._id !== id);
       return newTasks;
     });
     sortTasksByDate();
@@ -176,29 +162,27 @@ const Inbox = () => {
               Tasks
             </Title>
             <Stack spacing="sm">
-              {tasks.filter((task) => !task.completed).length > 0 ? (
+              {tasks.filter(task => !task.completed).length > 0 ? (
                 tasks
-                  .filter((task) => !task.completed)
-                  .map((task) => {
-                    return (
-                      <Task
-                        layout
-                        key={task._id}
-                        task={task}
-                        toggleComplete={toggleComplete}
-                        deleteTask={deleteTask}
-                        updateTask={updateTask}
-                        whileHover={{
-                          scale: 1.03,
-                          transition: { duration: 0.05, delay: 0 },
-                        }}
-                      />
-                    );
-                  })
+                  .filter(task => !task.completed)
+                  .map(task => (
+                    <Task
+                      layout
+                      key={task._id}
+                      task={task}
+                      toggleComplete={toggleComplete}
+                      deleteTask={deleteTask}
+                      updateTask={updateTask}
+                      whileHover={{
+                        scale: 1.03,
+                        transition: { duration: 0.05, delay: 0 },
+                      }}
+                    />
+                  ))
               ) : (
                 <Center
                   className={classes.emptyState}
-                  sx={(theme) => ({
+                  sx={theme => ({
                     display: "flex",
                     flexDirection: "column",
                   })}
@@ -212,28 +196,26 @@ const Inbox = () => {
               Completed
             </Title>
             <Stack spacing="sm">
-              {tasks.filter((task) => task.completed).length > 0 ? (
+              {tasks.filter(task => task.completed).length > 0 ? (
                 tasks
-                  .filter((task) => task.completed)
-                  .map((task) => {
-                    return (
-                      <Task
-                        key={task._id}
-                        task={task}
-                        toggleComplete={toggleComplete}
-                        deleteTask={deleteTask}
-                        updateTask={updateTask}
-                        whileHover={{
-                          scale: 1.03,
-                          transition: { duration: 0.05, delay: 0 },
-                        }}
-                      />
-                    );
-                  })
+                  .filter(task => task.completed)
+                  .map(task => (
+                    <Task
+                      key={task._id}
+                      task={task}
+                      toggleComplete={toggleComplete}
+                      deleteTask={deleteTask}
+                      updateTask={updateTask}
+                      whileHover={{
+                        scale: 1.03,
+                        transition: { duration: 0.05, delay: 0 },
+                      }}
+                    />
+                  ))
               ) : (
                 <Center
                   className={classes.emptyState}
-                  sx={(theme) => ({
+                  sx={theme => ({
                     display: "flex",
                     flexDirection: "column",
                   })}

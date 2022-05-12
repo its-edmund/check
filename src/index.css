@@ -3,60 +3,60 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../public/fonts/Gilroy-Thin.ttf");
   font-weight: 100;
+  font-family: Gilroy;
+  src: url("../public/fonts/Gilroy-Thin.ttf");
 }
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../public/fonts/Gilroy-UltraLight.ttf");
   font-weight: 200;
+  font-family: Gilroy;
+  src: url("../public/fonts/Gilroy-UltraLight.ttf");
 }
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../public/fonts/Gilroy-Light.ttf");
   font-weight: 300;
+  font-family: Gilroy;
+  src: url("../public/fonts/Gilroy-Light.ttf");
 }
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../public/fonts/Gilroy-Regular.ttf");
   font-weight: 400;
+  font-family: Gilroy;
+  src: url("../public/fonts/Gilroy-Regular.ttf");
 }
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../public/fonts/Gilroy-Medium.ttf");
   font-weight: 500;
+  font-family: Gilroy;
+  src: url("../public/fonts/Gilroy-Medium.ttf");
 }
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../public/fonts/Gilroy-Semibold.ttf");
   font-weight: 600;
+  font-family: Gilroy;
+  src: url("../public/fonts/Gilroy-Semibold.ttf");
 }
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../public/fonts/Gilroy-Bold.ttf");
   font-weight: 700;
+  font-family: Gilroy;
+  src: url("../public/fonts/Gilroy-Bold.ttf");
 }
 
 @font-face {
-  font-family: "Gilroy";
-  src: url("../public/fonts/Gilroy-Extrabold.ttf");
   font-weight: 800;
+  font-family: Gilroy;
+  src: url("../public/fonts/Gilroy-Extrabold.ttf");
 }
 
 a {
-  text-decoration: inherit;
   color: inherit;
+  text-decoration: inherit;
 }
 
 body {
-  margin: 0px;
+  margin: 0;
 }
 
 @layer components {
@@ -64,25 +64,38 @@ body {
     @apply font-bold border-2 bg-gradient-to-r from-green-400 to-teal-400 border-black rounded-full px-3 hover:from-black hover:to-black text-black hover:text-white;
   }
 
+  .btn-minor {
+    @apply hover:bg-gray-200 py-2 px-2 flex items-center rounded-lg text-gray-700;
+  }
+
+  .tooltip {
+    @apply invisible absolute;
+  }
+
+  .has-tooltip:hover .tooltip {
+    @apply visible z-50;
+  }
+
   .textarea-wrap {
     display: grid;
   }
 
   .textarea-wrap::after {
-    content: attr(data-replicated-value) " ";
     white-space: pre-wrap;
     visibility: hidden;
+    content: attr(data-replicated-value) " ";
   }
 
   .textarea-wrap > textarea {
-    resize: none;
     overflow: hidden;
+    resize: none;
   }
 
-  .text-wrap > textarea, .text-wrap::after {
-    border: 1px solid black;
+  .text-wrap > textarea,
+  .text-wrap::after {
+    grid-area: 1 / 1 / 2 / 2;
     padding: 0.5rem;
     font: inherit;
-    grid-area: 1 / 1 / 2 / 2;
+    border: 1px solid black;
   }
 }

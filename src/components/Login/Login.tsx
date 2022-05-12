@@ -1,18 +1,10 @@
-import {
-  Button,
-  Center,
-  Stack,
-  TextInput,
-  Title,
-  Alert,
-  Box,
-  Text,
-} from "@mantine/core";
+import { Button, Center, Stack, TextInput, Title, Alert, Box, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { AlertCircle } from "tabler-icons-react";
-import axios from "../../axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+
+import axios from "../../axios";
 
 const Login = () => {
   const [loginFailed, setLoginFailed] = useState(false);
@@ -25,7 +17,7 @@ const Login = () => {
       username: "",
       password: "",
     },
-    validate: (values) => ({
+    validate: values => ({
       username: values.username.length === 0 ? "Username is empty" : null,
       password: values.password.length === 0 ? "Password is empty" : null,
     }),
@@ -52,11 +44,9 @@ const Login = () => {
   };
 
   return (
-    <Center sx={(theme) => ({ height: "100vh" })}>
+    <Center sx={theme => ({ height: "100vh" })}>
       <form
-        onSubmit={form.onSubmit((values) =>
-          login(values.username, values.password)
-        )}
+        onSubmit={form.onSubmit(values => login(values.username, values.password))}
         onChange={() => {
           setLoginFailed(false);
         }}
@@ -68,9 +58,9 @@ const Login = () => {
           })}
         >
           <h1 className="text-3xl font-extrabold">Login</h1>
-          {loginFailed ? (
+          {loginFailed && (
             <Box
-              sx={(theme) => ({
+              sx={theme => ({
                 backgroundColor: theme.colors.red[5],
                 padding: "16px 8px",
                 color: "white",
@@ -80,8 +70,6 @@ const Login = () => {
             >
               <Text>Incorrect username or password!</Text>
             </Box>
-          ) : (
-            <></>
           )}
           <input
             className="rounded-full border-2 border-black text-lg px-3 py-1 font-bold"
